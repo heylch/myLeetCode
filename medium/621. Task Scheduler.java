@@ -1,3 +1,4 @@
+//Greedy, Array
 class Solution {
     public int leastInterval(char[] tasks, int n) {
         if(tasks.length ==0)
@@ -20,4 +21,42 @@ class Solution {
         int additonIdles = Math.max(0, blocksNum*emptyIdleInBlock - taskLeft);
         return tasks.length +  additonIdles;   
     }
+}
+
+//Priority Queue
+class Solution {
+    public int leastInterval(char[] tasks, int n){
+            if(tasks.length == 0)
+                return 0;
+            Map<Character, Integer> map = new HashMap<Character, Integer>();
+            for(int i=0; i < tasks.length; i++){
+                if(map.containsKey(tasks[i]))
+                    map.put(tasks[i], map.get(tasks[i]) +1);
+                else
+                    map.put(tasks[i], 1);
+            }
+            Queue<Integer> priorityQueue = new PriorityQueue<Integer>((a,b)-> (b-a));
+            for(Character task: map.keySet())
+                priorityQueue.add(map.get(task));
+            int result = 0;
+            while(!priorityQueue.isEmpty()){
+                Queue<Integer> temp = new PriorityQueue<Integer>((a,b)-> (b-a));
+                int k = n +1;
+                while(!priorityQueue.isEmpty() && k >0){
+                    int leftNum = priorityQueue.poll();
+                    k--;
+                    result++;
+                    if(leftNum -1 >0){
+                        temp.add(leftNum-1);
+                    }
+                }
+                priorityQueue = temp;
+                if(!priorityQueue.isEmpty())
+                    result += k;
+            }
+            if(result >= tasks.length)
+                return result;
+            else
+                return tasks.length;
+        }
 }
