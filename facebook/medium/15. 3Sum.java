@@ -1,3 +1,4 @@
+// Sort O(n^2)
 class Solution {
     public List<List<Integer>> threeSum(int[] num) {
         Arrays.sort(num);
@@ -17,4 +18,27 @@ class Solution {
             }
         }
         return res;
+}
+
+// without sort O(n^2)
+class Solution {
+    public List<List<Integer>> threeSum(int[] num) {
+        Set<List<Integer>> result = new HashSet<List<Integer>>();
+        Set<Integer> check = new HashSet<Integer>();
+        for(int i=0; i< num.length-2; i++){
+            if(!check.contains(num[i])){
+                Set<Integer> set = new HashSet<Integer>();
+                for(int j=i+1; j < num.length; j++){
+                    if(set.contains(0-num[i]-num[j]) && !check.contains(0-num[i]-num[j]) && !check.contains(num[j])){
+                        result.add(Arrays.asList(num[i],0-num[i]-num[j],num[j]));
+                    }
+                    else
+                        set.add(num[j]);
+                }
+                check.add(num[i]);
+            }
+        }
+        List<List<Integer>> res = new ArrayList<List<Integer>>(result);
+        return res;
+    }
 }
